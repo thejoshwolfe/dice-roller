@@ -3,14 +3,35 @@ var dumpPre = document.getElementById("dump");
 document.addEventListener("keydown", function(event) {
   if (event.ctrlKey || event.altKey) return;
   var shouldPreventDefault = true;
-  var char = String.fromCharCode(event.which);
-  if ("1" <= char && char <= "9") {
-    roll(parseInt(char));
-  } else if (char === " ") {
-    roll(3);
-  } else {
+  var key = event.which;
+  (function() {
+    switch (key) {
+      case 0x20: // Space
+        return roll(3);
+      case 0x31: // 1-9
+      case 0x32:
+      case 0x33:
+      case 0x34:
+      case 0x35:
+      case 0x36:
+      case 0x37:
+      case 0x38:
+      case 0x39:
+        return roll(key - 0x30);
+      case 0x61: // numpad 1-9
+      case 0x62:
+      case 0x63:
+      case 0x64:
+      case 0x65:
+      case 0x66:
+      case 0x67:
+      case 0x68:
+      case 0x69:
+        return roll(key - 0x60);
+    }
+    console.log("0x" + key.toString(16));
     shouldPreventDefault = false;
-  }
+  })();
   if (shouldPreventDefault) event.preventDefault();
 });
 var spacebareToggle = ["block", "none"];
