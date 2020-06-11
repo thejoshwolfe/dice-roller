@@ -32,6 +32,8 @@ document.addEventListener("keydown", function(event) {
       case 0x68:
       case 0x69:
         return numberPressed(key - 0x60);
+      case 0x51: // q
+        return quickContest();
     }
     console.log("0x" + key.toString(16));
     shouldPreventDefault = false;
@@ -65,6 +67,29 @@ function enterPressed() {
   if (n >= limit) return println("rolling "+n+" dice is too many. let's keep it under " + limit + ".");
   roll(n);
 }
+
+function quickContest() {
+  var results = [];
+  var sums = [];
+  for (var character = 0; character < 2; character++) {
+    var result = [];
+    var sum = 0;
+    for (var i = 0; i < 3; i++) {
+      var value = randint(1, 6);
+      result.push(value);
+      sum += value;
+    }
+    result.sort();
+    results.push(result);
+    sums.push(sum);
+  }
+  var difference = sums[0] - sums[1];
+  var line = (difference < 0 ? difference : "+" + difference) + " = ";
+  line += sums[0] + " - " + sums[1] + " = ";
+  line += "(" + results[0].join("+") + ")-(" + results[1].join("+") + ")";
+  println(line);
+}
+
 function roll(n) {
   if (n < 30) {
     var result = [];
